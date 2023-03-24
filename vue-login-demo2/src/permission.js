@@ -4,49 +4,65 @@ import { useRouterStore } from '@/pinia/modules/router'
 import router from '@/router'
 import Nprogress from 'nprogress'
 
-// const whiteList = ['Login', 'Init']
+const whiteList = ['login', 'Init']
 
-const getRouter = async(userStore) => {
+const getRouter = async() => {
   const routerStore = useRouterStore()
   await routerStore.SetAsyncRouter()
-  //await userStore.GetUserInfo()
+  // await userStore.GetUserInfo()
   const asyncRouters = routerStore.asyncRouters
   asyncRouters.forEach(asyncRouter => {
     router.addRoute(asyncRouter)
   })
+  console.log(asyncRouters)
 }
 
-async function handleKeepAlive(to) {
-  if (to.matched.some(item => item.meta.keepAlive)) {
-    if (to.matched && to.matched.length > 2) {
-      for (let i = 1; i < to.matched.length; i++) {
-        const element = to.matched[i - 1]
-        if (element.name === 'layout') {
-          to.matched.splice(i, 1)
-          await handleKeepAlive(to)
+
+router.beforeEach(async(to, from) => {
+
+  Nprogress.start()
+
+  const routerStore = useRouterStore()
+  to.meta.matched = [...to.matched]
+  // if (to.path === '/login') return next();
+
+  // await getRouter()
+  //没有token请求其它路径，返回/login页面
+  const userStore = useUserStore()
+  const token = userStore.token
+  if (whiteList.indexOf(to.name) > -1) {
+    if (token) {
+      if (!routerStore.asyncRouterFlag && whiteList.indexOf(from.name) < 0) {
+        await getRouter()
+      }
+    }
+  }else {
+    // 不在白名单中并且已经登录的时候
+    if (token) {
+      // 添加flag防止多次获取动态路由和栈溢出
+      if (!routerStore.asyncRouterFlag && whiteList.indexOf(from.name) < 0) {
+        await getRouter(userStore)
+        if (userStore.token) {
+          return { ...to, replace: true }
         }
-        // 如果没有按需加载完成则等待加载
-        if (typeof element.components.default === 'function') {
-          await element.components.default()
-          await handleKeepAlive(to)
+      }
+    }
+    if (!token) {
+      return {
+        name: 'login',
+        query: {
+          redirect: document.location.hash
         }
       }
     }
   }
-}
 
-router.beforeEach(async(to, from, next) => {
 
-  if (to.path === '/login') return next();
+  // if (!token) {
+  //   return next('login')
+  // }
 
-  await getRouter()
-  //没有token请求其它路径，返回/login页面
-  const userStore = useUserStore()
-  const token = userStore.token
-  if (!token) {
-    return next('/login')
-  }
-  next()
+  // next()
 })
 
 // router.beforeEach(async(to, from) => {

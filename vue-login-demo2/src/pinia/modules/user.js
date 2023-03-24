@@ -39,8 +39,9 @@ export const useUserStore = defineStore('user', () => {
         asyncRouters.forEach(asyncRouter => {
           router.addRoute(asyncRouter)
         })
+        console.log(asyncRouters)
         // router.push({ name: 'home', replace: true })
-        await router.replace({name: 'home'})
+        await router.replace({name: 'layout'})
         loadingInstance.value.close()
         return true
       }

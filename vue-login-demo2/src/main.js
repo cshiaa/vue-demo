@@ -10,7 +10,7 @@ import { store } from './pinia'
 // createApp(App).use(router).mount('#app')
 
 const app = createApp(App)
-app.use(router)
 app.use(store)
+app.use(router)
 app.use(ElementPlus)
 app.mount('#app')

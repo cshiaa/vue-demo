@@ -32,7 +32,8 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <template>
   <div id="app" class="login-wrap">
-    <router-view class="router-containt"></router-view>
+    <!-- <router-view class="router-containt"></router-view> -->
+    <router-view />
   </div>
 </template>
 

@@ -13,7 +13,7 @@
                 class="el-menu-vertical-demo"
                 router="true"
               >
-              <template v-for="menu in menuList" :key="menu.menuId">
+              <template v-for="menu in routerStore.asyncRouters[0].children" :key="menu.menuId">
                 <el-sub-menu :index.string="menu.menuId" >
                   <template #title >
                     <el-icon><location /></el-icon>
@@ -29,8 +29,10 @@
           </el-row>
         </el-aside>
       <el-container>
-        <el-header>Header</el-header>
-        <el-main>Main</el-main>
+        <router-view>
+          <el-header>Header</el-header>
+          <el-main>Main</el-main>
+        </router-view>
       </el-container>
     </el-container>
   </div>
@@ -50,15 +52,18 @@ import {
   Location,
   Setting,
 } from '@element-plus/icons-vue'
+import { useRouterStore } from '@/pinia/modules/router'
 
-import { getMenuList } from '@/api/menu'
+// import { getMenuList } from '@/api/menu'
 
-import { ref } from 'vue'
+// import { ref } from 'vue'
 
-    const menuList = ref([])
-    getMenuList().then(res => {
-      menuList.value = res.data.menuList
-    })
+//     const menuList = ref([])
+//     getMenuList().then(res => {
+//       menuList.value = res.data.menuList
+//     })
+
+const routerStore = useRouterStore()
 
 </script>
 

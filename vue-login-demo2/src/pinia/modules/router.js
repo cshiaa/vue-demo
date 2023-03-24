@@ -66,9 +66,9 @@ export const useRouterStore = defineStore('router', () => {
   const SetAsyncRouter = async() => {
     asyncRouterFlag.value++
     const baseRouter = [{
-      path: '/home',
-      name: 'home',
-      component: () => import('@/views/home/home.vue'),
+      path: '/layout',
+      name: 'layout',
+      component: () => import('@/views/layout/index.vue'),
       children: []
     }]
     // const baseRouter = [{}]
