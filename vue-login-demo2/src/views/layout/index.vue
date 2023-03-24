@@ -61,18 +61,9 @@
   } from '@element-plus/icons-vue'
   import { useRouterStore } from '@/pinia/modules/router'
   
-  // import { getMenuList } from '@/api/menu'
-  
-  // import { ref } from 'vue'
-  
-  //     const menuList = ref([])
-  //     getMenuList().then(res => {
-  //       menuList.value = res.data.menuList
-  //     })
   
   const routerStore = useRouterStore()
   
-//   console.log(routerStore.asyncRouters[0].children)
   </script>
   
   <style  scoped>
