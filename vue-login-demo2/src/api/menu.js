@@ -14,6 +14,6 @@ export const getMenuList = () => {
       url: '/admin/menu',
       method: 'get',
     })
-  }
+}
 
 

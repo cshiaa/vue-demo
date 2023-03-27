@@ -1,9 +1,9 @@
 <template>
-    <h3>Device</h3>
+    <h3>Dashboard</h3>
 </template>
 
 <script>
 export default {
-  name: 'Device'
+  name: 'Dashboard'
 }
 </script>

@@ -12,3 +12,10 @@ export const login = (data) => {
     })
 }
 
+//获取用户列表
+export const getUserList = () => {
+  return service({
+    url: '/user/list',
+    method: 'get',
+  })
+}
