@@ -62,7 +62,6 @@
             </el-dropdown>
           </el-header>
           <el-main>
-              <span> Main </span>
               <router-view></router-view>
           </el-main>
       </el-container>

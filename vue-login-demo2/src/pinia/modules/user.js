@@ -15,6 +15,7 @@ export const useUserStore = defineStore('user', () => {
     token.value = val
   }
 
+
   const NeedInit = () => {
     token.value = ''
     window.localStorage.removeItem('token')
@@ -73,6 +74,8 @@ export const useUserStore = defineStore('user', () => {
   watch(() => token.value, () => {
     window.localStorage.setItem('token', token.value)
   })
+
+
 
   return {
     token,

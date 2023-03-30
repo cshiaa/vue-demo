@@ -41,6 +41,11 @@ router.beforeEach(async(to, from) => {
         await getRouter(userStore)
         if (userStore.token) {
           return { ...to, replace: true }
+        }else {
+          return {
+            name: 'login',
+            query: { redirect: to.href }
+          }
         }
       }
     }
