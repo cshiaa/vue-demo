@@ -153,7 +153,7 @@
   const getConifgList = async() => {
     const confres = await getConfigList()
     if (confres.status === 200) {
-      conf.value = confres.data.confList
+      conf.value = confres.data.config
 
     }
   }
@@ -177,7 +177,7 @@
 
 <script>
 export default {
-  name: 'Config'
+  name: 'Base'
 }
 </script>
 

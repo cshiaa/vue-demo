@@ -16,5 +16,6 @@ declare module '@vue/runtime-core' {
     LoginByPwd: typeof import('./src/components/LoginByPwd.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    YamlEditor: typeof import('./src/components/YamlEditor/index.vue')['default']
   }
 }

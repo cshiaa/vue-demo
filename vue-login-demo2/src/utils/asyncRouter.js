@@ -6,7 +6,7 @@ export const asyncRouterHandle = (asyncRouter) => {
     if (item.url) {
       item.component = dynamicImport(viewModules, item.url)
       item.path = '/layout/' + item.url
-      item.name = item.url
+      item.name = item.name
     }
     if (item.children) {
       asyncRouterHandle(item.children)

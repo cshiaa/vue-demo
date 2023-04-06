@@ -118,7 +118,7 @@ service.interceptors.response.use(
             const userStore = useUserStore()
             userStore.token = ''
             localStorage.clear()
-            router.push({ name: 'Login', replace: true })
+            router.push({ name: 'login', replace: true })
           })
         break
       case 404:
