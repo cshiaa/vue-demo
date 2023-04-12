@@ -5,7 +5,7 @@ import { emitter } from '@/utils/bus.js'
 import router from '@/router/index'
 
 const service = axios.create({
-  baseURL: 'http://19.224.154.190:8089', // api的base_url,
+  baseURL: 'http://localhost:8089', // api的base_url,
   timeout: 99999
 })
 let acitveAxios = 0

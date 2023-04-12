@@ -97,7 +97,7 @@ export default {
     const yamlCode = ref('');
 
     // yaml代码
-    const path = ref('http://19.224.154.190:8089/file')
+    const path = ref('http://localhost:8089/file')
 
 
     const upload = ref<UploadInstance>()
@@ -141,7 +141,7 @@ export default {
     const handleReady = () => {
         // 从接口获取yaml文件内容
         axios
-          .get('http://19.224.154.190:8089/file/getFile')
+          .get('http://localhost:8089/file/getFile')
           .then((response) => {
             // 将文件内容绑定到codemirror组件的v-model指令中
             yamlCode.value = response.data;
