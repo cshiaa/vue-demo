@@ -6,7 +6,7 @@ import service from '@/utils/request'
 // @Router /login [post]
 export const login = (data) => {
     return service({
-      url: '/login',
+      url: '/api/login',
       method: 'post',
       data: data
     })
@@ -15,7 +15,7 @@ export const login = (data) => {
 //获取用户列表
 export const getUserList = () => {
   return service({
-    url: '/user/list',
+    url: '/api/user/list',
     method: 'get',
   })
 }

@@ -5,7 +5,7 @@ import { emitter } from '@/utils/bus.js'
 import router from '@/router/index'
 
 const service = axios.create({
-  baseURL: 'http://19.224.154.190:8089/api', // api的base_url,
+  baseURL: 'http://19.224.154.190:8089', // api的base_url,
   timeout: 99999
 })
 let acitveAxios = 0
@@ -35,11 +35,19 @@ service.interceptors.request.use(
     if (!config.donNotShowLoading) {
       showLoading()
     }
+    console.log(config)
     const userStore = useUserStore()
     config.headers = {
       'Content-Type': 'application/json',
       'atoken': userStore.token,
       ...config.headers
+    }
+    if (config.url === '/upload'){
+      config.headers = {
+        'Content-Type': 'multipart/form-data',
+        'atoken': userStore.token,
+        ...config.headers
+      }
     }
     return config
   },
@@ -145,7 +153,7 @@ service.interceptors.response.use(
             const userStore = useUserStore()
             userStore.token = ''
             localStorage.clear()
-            router.push({ name: 'Login', replace: true })
+            router.push({ name: 'login', replace: true })
           })
           break
     }

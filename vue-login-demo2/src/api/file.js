@@ -1,9 +1,10 @@
 import service from '@/utils/request'
 
 //获取文件
-export const getConfigList = () => {
+export const uploadFile = (data) => {
   return service({
-    url: '/api/list',
-    method: 'get',
+    url: '/file/upload',
+    method: 'post',
+    data: data
   })
 }

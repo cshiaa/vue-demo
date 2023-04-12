@@ -44,7 +44,7 @@ router.beforeEach(async(to, from) => {
         }else {
           return {
             name: 'login',
-            query: { redirect: to.href }
+            query: { redirect: document.location.hash }
           }
         }
       }
