@@ -10,7 +10,8 @@
         <template #default>
           <el-button link type="primary" size="small" @click="handleClick"
             >查看</el-button
-          >
+          >    
+          <PermissionButton></PermissionButton>
           <el-button link type="primary" size="small" style="color:red" @click="deleteUser">删除</el-button>
         </template>
       </el-table-column>
@@ -21,7 +22,7 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getUserList } from '@/api/user'
 import { ref } from 'vue'
-
+import PermissionButton from './permissions/index.vue'
 const tableData = ref([])
 
 const getTableData = async() => {
@@ -76,7 +77,7 @@ const deleteUser = () => {
 </script>
 
 <script>
-export default {
-  name: 'User'
-}
+  export default {
+    name: 'User'
+  }
 </script>

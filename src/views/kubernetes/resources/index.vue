@@ -112,6 +112,27 @@ const tableData: User[] = [
     address: 'No. 189, Grove St, Los Angeles',
   },
   ]
+const deploymentListData = `[
+  {
+    "metadata": {
+      "name": "deployment1",
+      "namespace": "default"
+    },
+    "status": {
+      "replicas": 1,
+      "available": true
+    }
+  },
+  {
+    "metadata": {
+      "name": "deployment2",
+      "namespace": "default"
+    },
+    "status": {
+      "replicas": 2,
+      "available": true
+    }
+  }]`
 
 interface Metadata {
   name: string
@@ -122,8 +143,12 @@ interface Status {
   replicas: number
 }
 
-interface Deployment extends Metadata, Status{}
+interface Deployment {
+  metadata: Metadata
+  status: Status
+}
 
-var DeploymentList: Deployment[];
+var DeploymentList: Deployment[] = JSON.parse(deploymentListData);
+console.log(DeploymentList)
 
 </script>
