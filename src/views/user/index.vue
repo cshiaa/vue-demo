@@ -7,11 +7,11 @@
       <el-table-column prop="phone" label="手机号" width="200" />
       <el-table-column prop="address" label="地址" width="200" />
       <el-table-column fixed="right" label="操作" width="200">
-        <template #default>
+        <template #default="scope">
           <el-button link type="primary" size="small" @click="handleClick"
             >查看</el-button
-          >    
-          <PermissionButton></PermissionButton>
+          >
+          <PermissionButton :id="scope.row.id" ></PermissionButton>
           <el-button link type="primary" size="small" style="color:red" @click="deleteUser">删除</el-button>
         </template>
       </el-table-column>
@@ -61,18 +61,6 @@ const deleteUser = () => {
       })
     })
 }
-
-
-
-// const tableData = [
-//   {
-//     ID: '2016-05-03',
-//     username: 'Tom',
-//     email: 'California',
-//     phone: 'Los Angeles',
-//     address: 'No. 189, Grove St, Los Angeles',
-//   },
-// ]
 
 </script>
 

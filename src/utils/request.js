@@ -35,7 +35,6 @@ service.interceptors.request.use(
     if (!config.donNotShowLoading) {
       showLoading()
     }
-    console.log(config)
     const userStore = useUserStore()
     config.headers = {
       'Content-Type': 'application/json',

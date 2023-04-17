@@ -1,5 +1,5 @@
 <template>
-    <el-button text @click="dialog = true"
+    <el-button text @click="getPermissions"
       >权限</el-button
     >
     <el-drawer
@@ -14,7 +14,8 @@
       <div class="demo-drawer__content">
         <div class="custom-tree-node-container">
             <el-tree
-            :data="data"
+            ref="treeRef"
+            :data="treeData"
             show-checkbox
             node-key="id"
             default-expand-all
@@ -22,49 +23,49 @@
             :props="{ class: customNodeClass }"
             />
         </div>
-
+        <br/>
         <div class="demo-drawer__footer">
-          <el-button @click="cancelForm">Cancel</el-button>
+          <el-button @click="cancelForm">取消</el-button>
           <el-button type="primary" :loading="loading" @click="onClick">{{
-            loading ? 'Submitting ...' : 'Submit'
+            loading ? '保存中 ...' : '保存'
           }}</el-button>
         </div>
       </div>
     </el-drawer>
-  </template>
+</template>
   
-  <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
-  import { ElDrawer, ElMessageBox } from 'element-plus'
+<script lang="ts" setup>
+  import { reactive, ref, onMounted, Ref  } from 'vue'
+  import { ElDrawer, ElMessageBox, ElTree  } from 'element-plus'
   import type Node from 'element-plus/es/components/tree/src/model/node'
 
+  import { getAllMenu, getUserMenu } from '../../../api/menu'
+  
   const formLabelWidth = '80px'
   let timer
   
   const dialog = ref(false)
   const loading = ref(false)
-  
-  const form = reactive({
-    name: '',
-    region: '',
-    date1: '',
-    date2: '',
-    delivery: false,
-    type: [],
-    resource: '',
-    desc: '',
+
+  const userData = defineProps({
+    id: {
+        type: Number
+    }
   })
 
   const drawerRef = ref<InstanceType<typeof ElDrawer>>()
+  const treeRef = ref<InstanceType<typeof ElTree>>()
+
   const onClick = () => {
     drawerRef.value!.close()
+    saveUserPermissions()
   }
 
   const handleClose = (done) => {
     if (loading.value) {
       return
     }
-    ElMessageBox.confirm('Do you want to submit?')
+    ElMessageBox.confirm('是否保存退出?')
       .then(() => {
         loading.value = true
         timer = setTimeout(() => {
@@ -73,11 +74,15 @@
           setTimeout(() => {
             loading.value = false
           }, 400)
-        }, 2000)
+        }, 1000)
       })
       .catch(() => {
         // catch error
       })
+  }
+
+  const saveUserPermissions = () => {
+    console.log(treeRef.value!.getCheckedKeys())
   }
 
   const cancelForm = () => {
@@ -86,74 +91,71 @@
     clearTimeout(timer)
   }
 
-    interface Tree {
-        id: number
-        label: string
-        isPenultimate?: boolean
-        children?: Tree[]
-    }
+  interface Tree {
+      id: number
+      label: string
+      isPenultimate?: boolean
+      children?: Tree[]
+  }
 
-    const customNodeClass = (data: Tree, node: Node) => {
-        if (data.isPenultimate) {
-            return 'is-penultimate'
-        }
-        return null
-    }
+  interface Menu {
+      menuId: number
+      menuName: string
+      children?: Menu[]
+  }
+    // const treeData: Tree[] = []
+    // const data = ref<Tree[]>()
+  const treeData: Ref<Tree[]> = ref([])
 
-    const data: Tree[] = [
-    {
-        id: 1,
-        label: 'Level one 1',
-        children: [
-        {
-            id: 4,
-            label: 'Level two 1-1',
-            isPenultimate: true,
-            children: [
-            {
-                id: 9,
-                label: 'Level three 1-1-1',
-            },
-            {
-                id: 10,
-                label: 'Level three 1-1-2',
-            },
-            ],
-        },
-        ],
-    },
-    {
-        id: 2,
-        label: 'Level one 2',
-        isPenultimate: true,
-        children: [
-        {
-            id: 5,
-            label: 'Level two 2-1',
-        },
-        {
-            id: 6,
-            label: 'Level two 2-2',
-        },
-        ],
-    },
-    {
-        id: 3,
-        label: 'Level one 3',
-        isPenultimate: false,
-        children: [
-        {
-            id: 7,
-            label: 'Level two 3-1',
-        },
-        {
-            id: 8,
-            label: 'Level two 3-2',
-        },
-        ],
-    },
-    ]
-  </script>
+  const getAllMenuList = async() => {
+    var menuresponse =  await getAllMenu()
+    const menuData: Menu[] = menuresponse.data.menuList
+    treeData.value = menuData.map((menu: Menu) => {
+        // return { id: menu.menuId, label: menu.menuName, children: menu.children };
+        return convert(menu)
+    });
+    // console.log(treeData)
+  }
+  onMounted(() => {
+    getAllMenuList()
+  })
+
+  const getPermissions = async() => {
+    dialog.value = true
+    console.log(userData.id)
+    var res = await getUserMenu( {userid: userData.id})
+    if (res.status == 200) {
+      const userMenu = res.data.userMenuList
+      console.log(userMenu)
+      treeRef.value!.setCheckedKeys(userMenu, false)
+
+    }
+    // var menuresponse =  await getAllMenu()
+    // const menuData: Menu[] = menuresponse.data.menuList
+    // const a  = menuData.map((menu: Menu) => {
+    //     // return { id: menu.menuId, label: menu.menuName, children: menu.children };
+    //     return convert(menu)
+    // });
+  }
+
+
+
+  function convert(menu: Menu): Tree {
+    const tree: Tree = { id: menu.menuId, label: menu.menuName };
+    if (menu.children) {
+      tree.children = menu.children.map((subB: Menu) => convert(subB));
+    }
+    return tree;
+  }
+
+  const customNodeClass = (data: Tree, node: Node) => {
+      if (data.isPenultimate) {
+          return 'is-penultimate'
+      }
+      return null
+  }
+
+</script>
 
 <script lang="ts" >
     export default {
