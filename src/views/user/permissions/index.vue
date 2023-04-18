@@ -39,7 +39,7 @@
   import { ElDrawer, ElMessageBox, ElTree  } from 'element-plus'
   import type Node from 'element-plus/es/components/tree/src/model/node'
 
-  import { getAllMenu, getUserMenu } from '../../../api/menu'
+  import { getAllMenu, getUserMenu, updateUserMenu } from '../../../api/menu'
   
   const formLabelWidth = '80px'
   let timer
@@ -81,8 +81,13 @@
       })
   }
 
-  const saveUserPermissions = () => {
-    console.log(treeRef.value!.getCheckedKeys())
+  const saveUserPermissions = async() => {
+    let newMenus = treeRef.value!.getCheckedKeys()
+    const res = await updateUserMenu({userid: userData.id}, {menuList: newMenus})
+    if (res.status === 200) {
+      console.log(newMenus)
+      console.log("保存成功")
+    }
   }
 
   const cancelForm = () => {

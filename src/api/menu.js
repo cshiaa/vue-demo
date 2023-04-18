@@ -25,7 +25,7 @@ export const getUserMenu = (id) => {
   })
 }
 
-//获取用户菜单列表
+//更新用户菜单列表
 export const updateUserMenu = (id, data) => {
   return service({
     url: '/menu/updateUserMenu',
