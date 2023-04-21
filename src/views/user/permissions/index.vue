@@ -83,7 +83,7 @@
 
   const saveUserPermissions = async() => {
     let newMenus = treeRef.value!.getCheckedKeys()
-    const res = await updateUserMenu({userid: userData.id}, {menuList: newMenus})
+    const res = await updateUserMenu({userid: userData.id}, {menusList: newMenus})
     if (res.status === 200) {
       console.log(newMenus)
       console.log("保存成功")
