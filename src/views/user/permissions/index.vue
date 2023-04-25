@@ -82,7 +82,7 @@
   }
 
   const saveUserPermissions = async() => {
-    let newMenus = treeRef.value!.getCheckedKeys()
+    let newMenus = treeRef.value!.getCheckedKeys().concat(treeRef.value!.getHalfCheckedKeys())
     const res = await updateUserMenu({userid: userData.id}, {menusList: newMenus})
     if (res.status === 200) {
       console.log(newMenus)
@@ -130,7 +130,7 @@
     console.log(userData.id)
     var res = await getUserMenu( {userid: userData.id})
     if (res.status == 200) {
-      const userMenu = res.data.userMenuList
+      const userMenu = res.data.userChildMenus
       console.log(userMenu)
       treeRef.value!.setCheckedKeys(userMenu, false)
 
