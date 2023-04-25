@@ -32,8 +32,8 @@ export const useUserStore = defineStore('user', () => {
     })
     try {
       const res = await login(loginInfo)
-      if (res.status === 200) {
-        setToken(res.data.atoken)
+      if (res.data.code === 0) {
+        setToken(res.data.data.atoken)
         const routerStore = useRouterStore()
         await routerStore.SetAsyncRouter()
         const asyncRouters = routerStore.asyncRouters
