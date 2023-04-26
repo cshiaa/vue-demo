@@ -12,10 +12,18 @@ export const login = (data) => {
     })
 }
 
+export const register = (data) => {
+  return service({
+    url: '/api/register',
+    method: 'post',
+    data: data
+  })
+}
+
 //获取用户列表
 export const getUserList = () => {
   return service({
-    url: '/api/user/list',
+    url: '/user/list',
     method: 'get',
   })
 }

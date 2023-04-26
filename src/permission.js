@@ -4,7 +4,7 @@ import { useRouterStore } from '@/pinia/modules/router'
 import router from '@/router'
 import Nprogress from 'nprogress'
 
-const whiteList = ['login', 'Init']
+const whiteList = ['login', 'Init', 'register']
 
 const getRouter = async() => {
   const routerStore = useRouterStore()

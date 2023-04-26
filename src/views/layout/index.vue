@@ -49,9 +49,10 @@
       
       <el-container>
           <el-header  style="text-align: right;">
+            <Breadcrumb />
             <el-dropdown @command="handleCommand" >
-              <span class="el-dropdown-link" style="cursor: pointer;line-height: 2;">
-                User Name<el-icon></el-icon>
+              <span class="el-dropdown-link" style="cursor: pointer;">
+                用户设置<el-icon></el-icon>
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -80,7 +81,7 @@
   import { ElMessage } from 'element-plus'
   import { useRouterStore } from '@/pinia/modules/router'
   import { useUserStore } from '@/pinia/modules/user'
-
+  import Breadcrumb from './breadcrumb/Breadcrumb.vue'
   const userStore = useUserStore()
   const routerStore = useRouterStore()
 

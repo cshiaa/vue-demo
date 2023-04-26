@@ -1,8 +1,9 @@
 <template>
-    <h3>Role</h3>
+  <h1>role</h1>
 </template>
 
-<script>
+
+<script lang="ts">
 export default {
   name: 'Role'
 }

@@ -35,7 +35,6 @@ service.interceptors.request.use(
     if (!config.donNotShowLoading) {
       showLoading()
     }
-    console.log(config)
     const userStore = useUserStore()
     config.headers = {
       'Content-Type': 'application/json',
@@ -67,6 +66,7 @@ service.interceptors.request.use(
 // http response 拦截器
 service.interceptors.response.use(
   response => {
+    console.log(response)
     const userStore = useUserStore()
     if (!response.config.donNotShowLoading) {
       closeLoading()
@@ -74,6 +74,7 @@ service.interceptors.response.use(
     if (response.headers['new-token']) {
       userStore.setToken(response.headers['new-token'])
     }
+
     if (response.status === 200) {
       if (response.headers.msg) {
         response.data.msg = decodeURI(response.headers.msg)
@@ -85,7 +86,7 @@ service.interceptors.response.use(
         message: response.data.msg || decodeURI(response.headers.msg),
         type: 'error'
       })
-      if (response.data.data && response.data.data.reload) {
+      if (response.status === 400) {
         userStore.token = ''
         localStorage.clear()
         router.push({ name: 'Login', replace: true })
@@ -140,9 +141,25 @@ service.interceptors.response.use(
           cancelButtonText: '取消'
         })
         break
-        case 401:
+      case 401:
+        ElMessageBox.confirm(`
+          <p>用户登录已超时${error}</p>
+          `, '登录超时', {
+          dangerouslyUseHTMLString: true,
+          distinguishCancelAndClose: true,
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消'
+        })          
+          .then(() => {
+          const userStore = useUserStore()
+          userStore.token = ''
+          localStorage.clear()
+          router.push({ name: 'login', replace: true })
+        })
+        break
+        case 400:
           ElMessageBox.confirm(`
-            <p>用户登录已超时${error}</p>
+            <p>用户Token已失效${error}</p>
             `, '登录超时', {
             dangerouslyUseHTMLString: true,
             distinguishCancelAndClose: true,

@@ -1,21 +1,4 @@
 <template>
-  <!-- <el-upload
-    class="upload-demo"
-    drag
-    :action="`${path}/upload`"
-    :headers="{'atoken':userStore.token}"
-    multiple
-  >
-    <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-    <div class="el-upload__text">
-      将文件拖拽到这里或者 <em>点击上传</em>
-    </div>
-    <template #tip>
-      <div class="el-upload__tip">
-        yaml files with a size less than 500kb
-      </div>
-    </template>
-  </el-upload> -->
   <el-upload
     ref="upload"
     class="upload-demo"
@@ -41,11 +24,6 @@
       @click="saveFile"
     >保存</el-button>
 
-    <!-- <template #tip>  
-      <div class="el-upload__tip text-red">
-        limit 1 file, new file will cover the old file
-      </div>
-    </template> -->
   </el-upload>
   <div class="box">
     <Codemirror
@@ -84,9 +62,9 @@ export default {
     import { genFileId } from 'element-plus'
     import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
-    import { ElNotification } from 'element-plus'
+    import { ElNotification, ElMessage } from 'element-plus'
 
-    import { uploadFile } from '../../../api/file'
+    import { uploadFile, getConfigFile } from '../../../api/file'
 
     import jsYaml from 'js-yaml';
 
@@ -138,17 +116,18 @@ export default {
       })
     }
 
-    const handleReady = () => {
+    const handleReady = async() => {
         // 从接口获取yaml文件内容
-        axios
-          .get('http://localhost:8089/file/getFile')
-          .then((response) => {
-            // 将文件内容绑定到codemirror组件的v-model指令中
-            yamlCode.value = response.data;
+        let res = await getConfigFile()
+        if (res.status === 200) {
+          yamlCode.value = res.data;
+        } else {
+          ElMessage({
+            showClose: true,
+            message: '上传文件失败',
+            type: 'error',
           })
-          .catch((error) => {
-            console.error('从接口获取数据失败:', error);
-          });
+        }
     }
 
     const saveFile = async() => {
@@ -158,15 +137,5 @@ export default {
       formData.append('file', data, 'config.yaml');
       await uploadFile(formData)
     }
-
-    // const handleInput = (value) => {
-    //   yamlCode.value = value;
-    //   try {
-    //     formattedCode.value = jsYaml.safeDump(jsYaml.safeLoad(yamlCode.value));
-    //   } catch (e) {
-    //     console.error('解析yaml文件出错:', e);
-    //     formattedCode.value = '';
-    //   }
-    // }
 
 </script>

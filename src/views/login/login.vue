@@ -18,7 +18,7 @@
             </el-form-item>
             <el-row style="justify-content: center;margin-top: -10px;">
                 <el-link type="primary" @click="toRegister">注册账号 </el-link>
-                <el-link type="primary" > 忘记密码</el-link>
+                <el-link type="primary" > &emsp;忘记密码</el-link>
             </el-row>
         </el-form>
     </div>
@@ -26,7 +26,8 @@
 
 <script setup>
     import { reactive } from 'vue'
-    import { useRouter } from 'vue-router'
+    // import { useRouter } from 'vue-router'
+    import router from '@/router/index'
     import { useUserStore } from '@/pinia/modules/user'
     import { ref } from 'vue'
 
@@ -36,7 +37,7 @@
         return await userStore.LoginIn(loginFormData)
     }
 
-    const router = useRouter()
+    // const router = useRouter()
 
     const loginForm = ref(null)
     const loginFormData = reactive({
@@ -64,7 +65,7 @@
     }
     const toRegister = () => {
     // authentication logic here
-        router.push({ path: '/register' })
+        router.push({ name: 'register', replace: true })
     }
 
 
