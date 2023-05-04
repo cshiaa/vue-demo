@@ -10,7 +10,7 @@
       @row-dblclick="showHostInfo"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column label="SN" width="80">
+      <!-- <el-table-column label="SN" width="80">
         <template #default="scope">{{ scope.row.sn }}</template>
       </el-table-column>
       <el-table-column property="ip" label="IP地址" width="100" />
@@ -24,9 +24,12 @@
       <el-table-column property="warehouseTime" label="入库时间" width="100" />
       <el-table-column property="outboundTime" label="出库时间" width="100" />
       <el-table-column property="user" label="使用人" />
-      <el-table-column property="description" label="说明" width="100" />
+      <el-table-column property="description" label="说明" width="100" /> -->
 
       <!-- <el-table-column property="address" label="Address" show-overflow-tooltip /> -->
+      <template v-for="(val, key, index) in hostLabel">
+        <el-table-column :property="key" :label="val" width="100" v-if="(key !== 'status') && ((key !== 'tag') ) "/>
+      </template>
       <el-table-column
       prop="tag"
       label="Tag"
@@ -48,16 +51,22 @@
       <el-button @click="toggleSelection()">取消选择</el-button>
     </div>
     <el-dialog v-model="dialogFormVisible" title="主机信息">
-      <el-form :model="formData">
-        <el-form-item :label="key" :label-width="formLabelWidth" v-for="(value, key, index) in formData">
-          <el-input :model="value" autocomplete="off" />
+      <el-form :model="hostLabel" v-for="(val, keys, index) in hostLabel">
+        <el-form-item :label="val" :label-width="formLabelWidth" v-if="keys != 'tag' ">
+            <!-- <el-input
+              v-model="formData.ip" 
+              autocomplete="off"
+            /> -->
+            <template v-for="(val2, keys2) in formData" :key="keys2">
+              <el-input :label="val2" v-model="formData[keys]" :placeholder="keys2" v-if="keys2 === keys"></el-input>
+            </template>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">Cancel</el-button>
+          <el-button @click="dialogFormVisible = false">取消</el-button>
           <el-button type="primary" @click="dialogFormVisible = false">
-            Confirm
+            保存
           </el-button>
         </span>
       </template>
@@ -65,7 +74,7 @@
   </template>
 
   <script lang="ts" setup>
-  import { ref } from 'vue'
+  import { ref, getCurrentInstance  } from 'vue'
   import { ElTable } from 'element-plus'
 
   const dialogFormVisible = ref(false)
@@ -102,6 +111,25 @@
     tag: string
   }
 
+  const hostLabel: Host = {
+      sn: 'SN',
+      ip: 'IP地址',
+      hostname: '主机名',
+      operatingSystem: '操作系统',
+      assetsType: '资产类型',
+      brand: '品牌型号',
+      memory: '内存',
+      cpu: 'CPU',
+      storage: '存储',
+      warehouseTime: '入库时间',
+      outboundTime: '出库时间',
+      user: '使用人',
+      description: '说明',
+      status: '状态',
+      tag: '',
+  }
+ 
+
   const multipleTableRef = ref<InstanceType<typeof ElTable>>()
   const multipleSelection = ref<Host[]>([])
   const currentRow = ref()
@@ -131,6 +159,9 @@
     dialogFormVisible.value = true
     formData.value = row
     console.log(formData)
+  }
+
+  const onInput = () => {
   }
   const tableData: Host[] = [
     {
